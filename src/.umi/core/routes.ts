@@ -154,6 +154,37 @@ export function getRoutes() {
               {
                 "name": "portalList",
                 "path": "/portal/index",
+                "component": dynamic({ loader: () => import(/* webpackChunkName: 'p__portal__article' */'/Users/return/workspace/react/gincmf-admin/src/pages/portal/article'), loading: LoadingComponent}),
+                "exact": true
+              },
+              {
+                "name": "portalAdd",
+                "path": "/portal/index/add",
+                "component": dynamic({ loader: () => import(/* webpackChunkName: 'p__portal__article__Add' */'/Users/return/workspace/react/gincmf-admin/src/pages/portal/article/Add'), loading: LoadingComponent}),
+                "exact": true
+              },
+              {
+                "name": "portalEdit",
+                "path": "/portal/index/edit/:id",
+                "component": dynamic({ loader: () => import(/* webpackChunkName: 'p__portal__article__Edit' */'/Users/return/workspace/react/gincmf-admin/src/pages/portal/article/Edit'), loading: LoadingComponent}),
+                "exact": true
+              },
+              {
+                "name": "pageList",
+                "path": "/portal/page",
+                "component": dynamic({ loader: () => import(/* webpackChunkName: 'p__portal__page' */'/Users/return/workspace/react/gincmf-admin/src/pages/portal/page'), loading: LoadingComponent}),
+                "exact": true
+              },
+              {
+                "name": "pageAdd",
+                "path": "/portal/page/add",
+                "component": dynamic({ loader: () => import(/* webpackChunkName: 'p__portal__page__Add' */'/Users/return/workspace/react/gincmf-admin/src/pages/portal/page/Add'), loading: LoadingComponent}),
+                "exact": true
+              },
+              {
+                "name": "pageEdit",
+                "path": "/portal/page/edit/:id",
+                "component": dynamic({ loader: () => import(/* webpackChunkName: 'p__portal__page__Edit' */'/Users/return/workspace/react/gincmf-admin/src/pages/portal/page/Edit'), loading: LoadingComponent}),
                 "exact": true
               },
               {
@@ -172,6 +203,12 @@ export function getRoutes() {
                 "name": "editPortalCategory",
                 "path": "/portal/category/edit/:id",
                 "component": dynamic({ loader: () => import(/* webpackChunkName: 'p__portal__category__Edit' */'/Users/return/workspace/react/gincmf-admin/src/pages/portal/category/Edit'), loading: LoadingComponent}),
+                "exact": true
+              },
+              {
+                "name": "portal/tag",
+                "path": "/portal/tag",
+                "component": dynamic({ loader: () => import(/* webpackChunkName: 'p__portal__tag' */'/Users/return/workspace/react/gincmf-admin/src/pages/portal/tag'), loading: LoadingComponent}),
                 "exact": true
               }
             ]

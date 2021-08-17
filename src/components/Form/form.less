@@ -1,5 +1,29 @@
 @import '~antd/es/style/themes/default.less';
 
+.relative {
+    position: relative;
+    .thumbnailImg {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 20px;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.3);
+        transform: translateX(50%) translateY(-50%);
+    }
+
+    &:hover{
+        .thumbnailImg {
+            display: block;
+        }
+    }
+}
+
 .multipleImage {
     :global {
         .img-wrap,

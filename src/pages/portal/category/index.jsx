@@ -134,11 +134,13 @@ const Category = () => {
         let data = [];
         if (result.code === 1) {
             data = result.data.data;
-            data.map((v) => {
-                const temp = v;
-                temp.status = status[v.status];
-                return temp;
-            });
+            if(data) {
+                data.map((v) => {
+                    const temp = v;
+                    temp.status = status[v.status];
+                    return temp;
+                });
+            }
         }
         return { data };
     };

@@ -12,3 +12,12 @@ export async function deleteAssets(id) {
         method: 'DELETE',
     });
 }
+
+export async function addAssets(params) {
+
+    return authRequest('/api/admin/assets', {
+        method: 'POST',
+        params,
+    });
+
+}

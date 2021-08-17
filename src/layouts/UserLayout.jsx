@@ -35,23 +35,23 @@ const UserLayout = (props) => {
 
             <div className={styles.container}>
                 <div className={styles.lang}>
-                    <SelectLang />
+                    {/* <SelectLang /> */}
                 </div>
                 <div className={styles.content}>
                     <div className={styles.top}>
                         <div className={styles.header}>
                             <Link to="/">
                                 <img alt="logo" className={styles.logo} src={logo} />
-                                <span className={styles.title}>Ant Design</span>
+                                <span className={styles.title}>乐西视界管理后台</span>
                             </Link>
                         </div>
                         <div className={styles.desc}>
-                            Ant Design 是西湖区最具影响力的 Web 设计规范
+                            码上云提供技术支持
                         </div>
                     </div>
                     {children}
                 </div>
-                <DefaultFooter />
+                {/* <DefaultFooter links={[]} copyright={[]} /> */}
             </div>
         </HelmetProvider>
     );

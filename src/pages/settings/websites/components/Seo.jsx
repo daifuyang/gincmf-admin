@@ -48,11 +48,11 @@ const Seo = ({ formData, handleSubmit }) => {
                         <Input placeholder="" />
                     </Form.Item>
 
-                    <Form.Item label="SEO关键字" name="site_seo_description">
+                    <Form.Item label="SEO关键字" name="site_seo_keywords">
                         <Input placeholder="" />
                     </Form.Item>
 
-                    <Form.Item label="SEO描述" name="site_seo_keywords">
+                    <Form.Item label="SEO描述" name="site_seo_description">
                         <TextArea rows={4} />
                     </Form.Item>
 

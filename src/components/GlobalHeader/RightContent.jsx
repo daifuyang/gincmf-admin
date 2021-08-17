@@ -1,5 +1,5 @@
 import { Tag, message } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined ,BgColorsOutlined} from '@ant-design/icons';
 import React from 'react';
 import { connect } from 'umi';
 import Avatar from './AvatarDropdown';
@@ -26,6 +26,20 @@ const GlobalHeaderRight = (props) => {
                     onClick={() => {
                         sessionStorage.clear();
                         message.success('清理成功！');
+                    }}
+                    style={{ fontSize: '15px' }}
+                />
+            </span>
+
+            <span className={`${styles.action} ${styles.account}`}>
+                <BgColorsOutlined
+                    onClick={() => {
+                        const token = localStorage.getItem("token")
+                        if(token) {
+                            const tokenObj = JSON.parse(token)
+                            window.open(`${WEB_HOST}/?design=1&access_token=${tokenObj.access_token}`)
+                        }
+                       
                     }}
                     style={{ fontSize: '15px' }}
                 />

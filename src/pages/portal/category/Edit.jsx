@@ -22,7 +22,8 @@ const Edit = (props) => {
     const [cardActive, setCardActive] = useState('basic');
 
     const [formData, dispatch] = useReducer((state, action) => {
-        const tempState = [...state];
+
+        const tempState = {...state};
         Object.keys(action).forEach((key) => {
             let val = action[key];
             if (key === 'parent_id') {
@@ -30,7 +31,7 @@ const Edit = (props) => {
             }
             tempState[key] = val;
         });
-        return { ...state };
+        return { ...tempState };
     }, {});
 
     const tabListNoTitle = [
@@ -52,6 +53,9 @@ const Edit = (props) => {
     useEffect(() => {
         const featchData = async () => {
             const result = await getPortalCategory(id);
+
+            console.log(result)
+
             if (result.code === 1) {
                 dispatch(result.data);
             }

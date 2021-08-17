@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import { Form, Select, Row, Col } from 'antd';
+
+import { getThemeFiles } from '@/services/themeFile';
 
 const { Option } = Select;
 
@@ -15,6 +17,12 @@ const formItemLayout = {
 };
 
 const Tpl = (props) => {
+
+    const [tpl,setTpl] = useState({
+        "list":[],
+        "article":[]
+    })
+
     const { onFormChange, form, formData } = props;
     useEffect(() => {
         // 编辑
@@ -23,6 +31,17 @@ const Tpl = (props) => {
         }
     }, [formData]);
 
+    useEffect( () => {
+        const init  = async () => {
+            const result = await getThemeFiles({'theme':'leshy'})
+            if(result.code === 1) {
+                setTpl(result.data)
+            }
+        }
+        init()
+
+    },[])
+    
     return (
         <Row>
             <Col span={12}>
@@ -31,11 +50,10 @@ const Tpl = (props) => {
                         label="列表模板"
                         name="list_tpl"
                         rules={[{ required: true, message: '列表模板不能为空!' }]}
-                        initialValue=""
+                        
                     >
-                        <Select>
-                            <Option value="">请选择</Option>
-                            <Option value="list">文章列表页 portal/list.html</Option>
+                        <Select placeholder="请选择模板">
+                        { tpl.list.map( (item,index) =>  <Option key={index} value={item.file}>{item.name}</Option> ) }
                         </Select>
                     </Form.Item>
 
@@ -43,11 +61,10 @@ const Tpl = (props) => {
                         label="文章模板"
                         name="one_tpl"
                         rules={[{ required: true, message: '文章模板不能为空!' }]}
-                        initialValue=""
+                       
                     >
-                        <Select>
-                            <Option value="">请选择</Option>
-                            <Option value="article">文章详情页 portal/article.html</Option>
+                        <Select placeholder="请选择模板">
+                        { tpl.article.map( (item,index) =>  <Option key={index} value={item.file}>{item.name}</Option> ) }
                         </Select>
                     </Form.Item>
                 </Form>

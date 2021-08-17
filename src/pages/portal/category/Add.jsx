@@ -22,12 +22,12 @@ const Add = (props) => {
     const [cardActive, setCardActive] = useState('basic');
 
     const [formData, dispatch] = useReducer((state, action) => {
-        const temState = [...state];
+        const temState = {...state};
         Object.keys(action).forEach((key) => {
             temState[key] = action[key];
         });
 
-        return state;
+        return temState;
     }, {});
 
     const tabListNoTitle = [

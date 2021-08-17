@@ -2,8 +2,11 @@
 import { defineConfig } from "umi";
 import defaultSettings from "./defaultSettings";
 import proxy from "./proxy";
+
 const { REACT_APP_ENV } = process.env;
 const publicPath = "/admin/";
+// const webHost = "http://localhost:3000";
+const webHost = "http://47.89.187.207";
 export default defineConfig({
   hash: true,
   antd: {},
@@ -150,7 +153,35 @@ export default defineConfig({
                 {
                   name: "portalList",
                   path: "/portal/index",
+                  component: "./portal/article",
                 },
+                {
+                  name: "portalAdd",
+                  path: "/portal/index/add",
+                  component: "./portal/article/Add",
+                },
+                {
+                  name: "portalEdit",
+                  path: "/portal/index/edit/:id",
+                  component: "./portal/article/Edit",
+                },
+
+                {
+                  name: "pageList",
+                  path: "/portal/page",
+                  component: "./portal/page",
+                },
+                {
+                  name: "pageAdd",
+                  path: "/portal/page/add",
+                  component: "./portal/page/Add",
+                },
+                {
+                  name: "pageEdit",
+                  path: "/portal/page/edit/:id",
+                  component: "./portal/page/Edit",
+                },
+
                 {
                   name: "portalCategory",
                   path: "/portal/category",
@@ -165,6 +196,11 @@ export default defineConfig({
                   name: "editPortalCategory",
                   path: "/portal/category/edit/:id",
                   component: "./portal/category/Edit",
+                },
+                {
+                  name: "portal/tag",
+                  path: "/portal/tag",
+                  component: "./portal/tag",
                 }
               ]
             },
@@ -189,6 +225,7 @@ export default defineConfig({
   },
   define: {
     PUBLIC_PATH: publicPath,
+    WEB_HOST:webHost,
   },
   // @ts-ignore
   title: false,
@@ -196,11 +233,11 @@ export default defineConfig({
   proxy: proxy[REACT_APP_ENV || "dev"],
   manifest: {
     basePath:
-      publicPath.substr(0, publicPath.length - 1) == ""
+      publicPath.substr(0, publicPath.length - 1) === ""
         ? "/"
         : publicPath.substr(0, publicPath.length - 1),
   },
   base: publicPath,
-  //最终输出路径
-  publicPath: publicPath,
+  // 最终输出路径
+  publicPath,
 });
