@@ -134,7 +134,7 @@ const Category = () => {
         let data = [];
         if (result.code === 1) {
             data = result.data.data;
-            if(data) {
+            if (data) {
                 data.map((v) => {
                     const temp = v;
                     temp.status = status[v.status];

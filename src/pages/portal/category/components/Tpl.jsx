@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Select, Row, Col } from 'antd';
 
 import { getThemeFiles } from '@/services/themeFile';
@@ -17,11 +17,10 @@ const formItemLayout = {
 };
 
 const Tpl = (props) => {
-
-    const [tpl,setTpl] = useState({
-        "list":[],
-        "article":[]
-    })
+    const [tpl, setTpl] = useState({
+        list: [],
+        article: [],
+    });
 
     const { onFormChange, form, formData } = props;
     useEffect(() => {
@@ -31,17 +30,16 @@ const Tpl = (props) => {
         }
     }, [formData]);
 
-    useEffect( () => {
-        const init  = async () => {
-            const result = await getThemeFiles({'theme':'leshy'})
-            if(result.code === 1) {
-                setTpl(result.data)
+    useEffect(() => {
+        const init = async () => {
+            const result = await getThemeFiles({ theme: 'leshy' });
+            if (result.code === 1) {
+                setTpl(result.data);
             }
-        }
-        init()
+        };
+        init();
+    }, []);
 
-    },[])
-    
     return (
         <Row>
             <Col span={12}>
@@ -50,10 +48,13 @@ const Tpl = (props) => {
                         label="列表模板"
                         name="list_tpl"
                         rules={[{ required: true, message: '列表模板不能为空!' }]}
-                        
                     >
                         <Select placeholder="请选择模板">
-                        { tpl.list.map( (item,index) =>  <Option key={index} value={item.file}>{item.name}</Option> ) }
+                            {tpl.list.map((item, index) => (
+                                <Option key={index} value={item.file}>
+                                    {item.name}
+                                </Option>
+                            ))}
                         </Select>
                     </Form.Item>
 
@@ -61,10 +62,13 @@ const Tpl = (props) => {
                         label="文章模板"
                         name="one_tpl"
                         rules={[{ required: true, message: '文章模板不能为空!' }]}
-                       
                     >
                         <Select placeholder="请选择模板">
-                        { tpl.article.map( (item,index) =>  <Option key={index} value={item.file}>{item.name}</Option> ) }
+                            {tpl.article.map((item, index) => (
+                                <Option key={index} value={item.file}>
+                                    {item.name}
+                                </Option>
+                            ))}
                         </Select>
                     </Form.Item>
                 </Form>

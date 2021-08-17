@@ -22,8 +22,7 @@ const Edit = (props) => {
     const [cardActive, setCardActive] = useState('basic');
 
     const [formData, dispatch] = useReducer((state, action) => {
-
-        const tempState = {...state};
+        const tempState = { ...state };
         Object.keys(action).forEach((key) => {
             let val = action[key];
             if (key === 'parent_id') {
@@ -54,7 +53,7 @@ const Edit = (props) => {
         const featchData = async () => {
             const result = await getPortalCategory(id);
 
-            console.log(result)
+            console.log(result);
 
             if (result.code === 1) {
                 dispatch(result.data);

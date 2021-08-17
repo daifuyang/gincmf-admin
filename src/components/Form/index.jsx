@@ -20,11 +20,11 @@ const AssetsInput = (props) => {
     const assetsRef = useRef();
 
     useEffect(() => {
-        console.log(path)
+        console.log(path);
         if (path) {
-            setPrevPath(path)
+            setPrevPath(path);
         }
-    }, [path])
+    }, [path]);
 
     const openAssetsModal = () => {
         assetsRef.current.modalVisible(true, type);
@@ -38,19 +38,21 @@ const AssetsInput = (props) => {
     };
 
     const deleteImage = (ev) => {
-        setPrevPath("");
+        setPrevPath('');
         if (onChange) {
-            onChange("");
+            onChange('');
         }
-        ev.stopPropagation()
-    }
+        ev.stopPropagation();
+    };
 
     const getImage = () => {
         if (prevPath === '' || prevPath === undefined) {
-            return <div className="upload" onClick={openAssetsModal}>
-                <CloudUploadOutlined style={{ fontSize: '1.5rem' }} />
-                <div className="ant-upload-text">上传图片</div>
-            </div>
+            return (
+                <div className="upload" onClick={openAssetsModal}>
+                    <CloudUploadOutlined style={{ fontSize: '1.5rem' }} />
+                    <div className="ant-upload-text">上传图片</div>
+                </div>
+            );
         }
         return (
             <div
@@ -60,13 +62,12 @@ const AssetsInput = (props) => {
             >
                 <img src={prevPath} alt="" />
 
-                <div onClick={deleteImage} className={styles.thumbnailImg} >
+                <div onClick={deleteImage} className={styles.thumbnailImg}>
                     <CloseOutlined />
                 </div>
-
             </div>
-        )
-    }
+        );
+    };
 
     const getAudio = () => {
         if (prevPath === '' || prevPath === undefined) {
@@ -75,7 +76,7 @@ const AssetsInput = (props) => {
                     <CloudUploadOutlined style={{ fontSize: '1.5rem' }} />
                     <div className="ant-upload-text">上传音频</div>
                 </div>
-            )
+            );
         }
 
         return (
@@ -86,9 +87,10 @@ const AssetsInput = (props) => {
 
                 <Button onClick={openAssetsModal} type="primary" icon={<CloudUploadOutlined />}>
                     上传
-            </Button>
-            </div>)
-    }
+                </Button>
+            </div>
+        );
+    };
 
     const getVideo = () => {
         if (prevPath === '' || prevPath === undefined) {
@@ -97,7 +99,7 @@ const AssetsInput = (props) => {
                     <CloudUploadOutlined style={{ fontSize: '1.5rem' }} />
                     <div className="ant-upload-text">上传视频</div>
                 </div>
-            )
+            );
         }
         return (
             <>
@@ -116,44 +118,42 @@ const AssetsInput = (props) => {
                     </Button>
                 </div>
             </>
-        )
-    }
+        );
+    };
 
     return (
         <>
             <AssetsModal ref={assetsRef} onOk={onAssetsModalOk} />
             <Input value={value} style={{ display: 'none' }} />
             {(() => {
-                if (type === "image") {
-                    return getImage()
+                if (type === 'image') {
+                    return getImage();
                 }
-                if (type === "audio") {
-                    return getAudio()
+                if (type === 'audio') {
+                    return getAudio();
                 }
-                if (type === "video") {
-                    return getVideo()
+                if (type === 'video') {
+                    return getVideo();
                 }
             })()}
         </>
-    )
-}
+    );
+};
 
 // 图片多选组件
-const AssetsMultInput = ({ value = [], type = "image", onChange }) => {
-
+const AssetsMultInput = ({ value = [], type = 'image', onChange }) => {
     const [multiple, setMultiple] = useState(false);
     const assetsRef = useRef();
 
     const [visible, setVisible] = useState(false);
     const [index, setIndex] = useState(0);
 
-    const [actionType, setActionType] = useState("");
+    const [actionType, setActionType] = useState('');
     const [editIndex, setEditIndex] = useState(0);
 
     const [assets, dispatch] = useReducer((state, action) => {
-
-        let temp = [...state]
-        const { data } = action
+        let temp = [...state];
+        const { data } = action;
 
         switch (action.type) {
             case 'init':
@@ -165,7 +165,7 @@ const AssetsMultInput = ({ value = [], type = "image", onChange }) => {
                 });
                 break;
             case 'edit':
-                console.log(editIndex, data)
+                console.log(editIndex, data);
                 temp[editIndex] = data;
                 break;
             case 'delete':
@@ -176,14 +176,13 @@ const AssetsMultInput = ({ value = [], type = "image", onChange }) => {
         }
 
         return temp;
-
-    }, [])
+    }, []);
 
     useEffect(() => {
         if (onChange) {
-            onChange(assets)
+            onChange(assets);
         }
-    }, [assets])
+    }, [assets]);
 
     const openAssetsModal = () => {
         setMultiple(true);
@@ -197,34 +196,32 @@ const AssetsMultInput = ({ value = [], type = "image", onChange }) => {
     };
 
     const onAssetsModalOk = (data = []) => {
-
         dispatch({
             type: actionType,
-            data
-        })
-
+            data,
+        });
     };
 
     const handleAssetsEdit = (i, e) => {
         e.stopPropagation();
         setMultiple(false);
         setActionType('edit');
-        console.log("i", i);
+        console.log('i', i);
         setEditIndex(i);
         assetsRef.current.modalVisible(true, type);
     };
 
-    // 
+    //
     const handleAssetsDelete = (i, e) => {
-        e.stopPropagation()
-        console.log("删除索引" + i)
+        e.stopPropagation();
+        console.log('删除索引' + i);
         dispatch({
-            type: "delete",
-            dadta: i
-        })
+            type: 'delete',
+            dadta: i,
+        });
 
         if (onChange) {
-            onChange(assets)
+            onChange(assets);
         }
     };
 
@@ -232,10 +229,7 @@ const AssetsMultInput = ({ value = [], type = "image", onChange }) => {
         <Row className={styles.multipleImage} gutter={[24, 24]}>
             {value.map((v, i) => (
                 <Col key={`image-${i}`} span={6}>
-                    <div
-                        className={`${styles.imgWrap} img-wrap`}
-                        onClick={() => openPreview(i)}
-                    >
+                    <div className={`${styles.imgWrap} img-wrap`} onClick={() => openPreview(i)}>
                         <img src={v.prev_path} alt="" />
                         <div className={`${styles.handleBtn} d-flex`}>
                             <div
@@ -245,7 +239,7 @@ const AssetsMultInput = ({ value = [], type = "image", onChange }) => {
                                 className={`flex-1 ${styles.btnItem}`}
                             >
                                 替换
-                        </div>
+                            </div>
                             <div className={styles.vLine} />
                             <div
                                 onClick={(e) => {
@@ -254,45 +248,50 @@ const AssetsMultInput = ({ value = [], type = "image", onChange }) => {
                                 className={`flex-1 ${styles.btnItem}`}
                             >
                                 删除
-                        </div>
+                            </div>
                         </div>
                     </div>
                 </Col>
             ))}
             <Col span={6}>
-                <div
-                    className="upload"
-                    onClick={openAssetsModal}>
+                <div className="upload" onClick={openAssetsModal}>
                     <CloudUploadOutlined style={{ fontSize: '1.5rem' }} />
                     <div className="ant-upload-text">上传图片</div>
                 </div>
             </Col>
         </Row>
-    )
+    );
 
     const getFile = () => (
         <>
-            {
-                value.map((v, i) => (
-                    <div key={i} className="d-flex">
-                        <a className="flex-1" href={v.prev_path}>{v.remark_name}</a>
-                        <a style={{ marginRight: "15px" }} onClick={(e) => {
+            {value.map((v, i) => (
+                <div key={i} className="d-flex">
+                    <a className="flex-1" href={v.prev_path}>
+                        {v.remark_name}
+                    </a>
+                    <a
+                        style={{ marginRight: '15px' }}
+                        onClick={(e) => {
                             handleAssetsEdit(i, e);
-                        }}>
-                            替换 </a>
+                        }}
+                    >
+                        替换{' '}
+                    </a>
 
-                        <a onClick={(e) => {
+                    <a
+                        onClick={(e) => {
                             handleAssetsDelete(i, e);
-                        }} style={{ color: "#ff4d4f" }}>
-                            删除</a>
-                    </div>
-                ))
-            }
+                        }}
+                        style={{ color: '#ff4d4f' }}
+                    >
+                        删除
+                    </a>
+                </div>
+            ))}
 
             <a onClick={openAssetsModal}>上传资源</a>
-
         </>
-    )
+    );
 
     return (
         <>
@@ -300,25 +299,21 @@ const AssetsMultInput = ({ value = [], type = "image", onChange }) => {
             <AssetsModal multiple={multiple} ref={assetsRef} onOk={onAssetsModalOk} />
             <div>
                 {(() => {
-
-                    if (type === "image") {
-                        return getImage()
+                    if (type === 'image') {
+                        return getImage();
                     }
 
-                    if (type === "file") {
-                        return getFile()
+                    if (type === 'file') {
+                        return getFile();
                     }
-
                 })()}
             </div>
         </>
     );
 };
 
-
 // 处理富文本上传逻辑
 const uploadHandler = (blobInfo, success, failure, progress) => {
-
     var xhr, formData;
 
     xhr = new XMLHttpRequest();
@@ -334,7 +329,7 @@ const uploadHandler = (blobInfo, success, failure, progress) => {
     xhr.setRequestHeader('Authorization', `Bearer ${token.access_token}`);
 
     xhr.upload.onprogress = function (e) {
-        progress(e.loaded / e.total * 100);
+        progress((e.loaded / e.total) * 100);
     };
 
     xhr.onload = function () {
@@ -353,12 +348,11 @@ const uploadHandler = (blobInfo, success, failure, progress) => {
         const result = JSON.parse(xhr.responseText);
 
         if (result.code === 1) {
-            success(result.data[0].prev_path)
-            return
+            success(result.data[0].prev_path);
+            return;
         }
 
         failure(result.msg);
-
     };
 
     xhr.onerror = function () {
@@ -369,14 +363,12 @@ const uploadHandler = (blobInfo, success, failure, progress) => {
     formData.append('file[]', blobInfo.blob(), blobInfo.filename());
 
     xhr.send(formData);
-
-}
+};
 
 /**
  * 自定义图文编辑器
  */
 const EditorInput = ({ value = '', onChange }) => {
-
     const triggerChange = (changedValue) => {
         if (onChange) {
             onChange(changedValue);
@@ -398,10 +390,11 @@ const EditorInput = ({ value = '', onChange }) => {
                     ],
                     toolbar:
                         'insertfile a11ycheck undo redo |formatselect removeformat lineheight bold italic | forecolor backcolor | fontselect template codesample | alignleft aligncenter alignright alignjustify | bullist numlist | table tableinsertdialog tablecellprops tableprops | link image tinydrive | preview code fullscreen',
-                    font_formats: 'minion-pro display,serif;Arial=arial,helvetica,sans-serif; Courier New=courier new,courier,monospace; AkrutiKndPadmini=Akpdmi-n',
+                    font_formats:
+                        'minion-pro display,serif;Arial=arial,helvetica,sans-serif; Courier New=courier new,courier,monospace; AkrutiKndPadmini=Akpdmi-n',
                     lineheight_formats: '1 1.1 1.15 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2',
                     language: 'zh_CN',
-                    images_upload_handler: uploadHandler
+                    images_upload_handler: uploadHandler,
                 }}
                 value={value}
                 onChange={(e) => {

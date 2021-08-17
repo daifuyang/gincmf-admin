@@ -5,8 +5,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import PostForm from './components/PostForm';
 
 const Add = (props) => {
-   
-    const { id } = props.match.params
+    const { id } = props.match.params;
 
     return (
         <PageHeaderWrapper
@@ -15,7 +14,7 @@ const Add = (props) => {
             }}
         >
             <Card>
-                <PostForm editId={id}/>
+                <PostForm editId={id} />
             </Card>
         </PageHeaderWrapper>
     );

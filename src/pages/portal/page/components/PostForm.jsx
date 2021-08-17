@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, Select, message, Radio } from 'antd';
-import { AssetsInput, AssetsMultInput, EditorInput } from '@/components/Form'
+import { AssetsInput, AssetsMultInput, EditorInput } from '@/components/Form';
 import { history } from 'umi';
 import { getPortal, addPortal, updatePortal } from '@/services/portal';
 
@@ -18,107 +18,107 @@ const layout = {
 const { Option } = Select;
 
 const PostForm = ({ editId }) => {
+    const [form] = Form.useForm();
 
-    const [form] = Form.useForm()
+    const [post, setPost] = useState([]);
 
-    const [post, setPost] = useState([])
-
-    const [tpl,setTpl] = useState([])
+    const [tpl, setTpl] = useState([]);
 
     const onFinish = async (data) => {
+        const param = { ...data };
+        const { category } = param;
 
-        const param = { ...data }
-        const { category } = param
-
-        const categoryIds = []
+        const categoryIds = [];
         if (category !== undefined) {
-            category.forEach(element => {
-                categoryIds.push(element.value)
+            category.forEach((element) => {
+                categoryIds.push(element.value);
             });
         }
 
-        param.category_ids = categoryIds
+        param.category_ids = categoryIds;
 
-        param.is_top = param.is_top ? 1 : 0
-        param.recommended = param.recommended ? 1 : 0
+        param.is_top = param.is_top ? 1 : 0;
+        param.recommended = param.recommended ? 1 : 0;
 
-        param.post_type = 2
+        param.post_type = 2;
 
-        let result
+        let result;
         if (editId > 0) {
-            result = await updatePortal(editId, param)
+            result = await updatePortal(editId, param);
         } else {
-            result = await addPortal(param)
+            result = await addPortal(param);
         }
 
-
         if (result.code === 1) {
-            if(!editId) {
+            if (!editId) {
                 history.push(`/portal/page/edit/${result.data.id}`);
             }
             message.success(result.msg);
-            return
+            return;
         }
         message.error(result.msg);
-
-    }
+    };
 
     useEffect(() => {
-
         const featchPost = async () => {
             const result = await getPortal(editId);
             if (result.code === 1) {
-                const { data } = result
+                const { data } = result;
                 if (data.category instanceof Array) {
-                    const category = []
-                    data.category.forEach(element => {
+                    const category = [];
+                    data.category.forEach((element) => {
                         category.push({
                             label: element.name,
-                            value: element.id.toString()
-                        })
+                            value: element.id.toString(),
+                        });
                     });
                 }
 
-                if (data.post_keywords === "") {
-                    delete (data.post_keywords)
+                if (data.post_keywords === '') {
+                    delete data.post_keywords;
                 } else {
-                    data.post_keywords = data.keywords
+                    data.post_keywords = data.keywords;
                 }
 
-                form.setFieldsValue(data)
-                setPost(data)
+                form.setFieldsValue(data);
+                setPost(data);
             }
         };
-       
+
         if (editId > 0) {
-            featchPost()
+            featchPost();
         }
 
-        const init  = async () => {
-            const result = await getThemeFiles({'theme':'leshy','type':'page'})
-            
-            if(result.code === 1) {
-                setTpl(result.data)
+        const init = async () => {
+            const result = await getThemeFiles({ theme: 'leshy', type: 'page' });
+
+            if (result.code === 1) {
+                setTpl(result.data);
             }
+        };
 
-        }
-
-        init()
-
+        init();
     }, [editId]);
 
     return (
         <Form form={form} style={{ maxWidth: '800px' }} {...layout} onFinish={onFinish}>
-
-            <Form.Item label="标题" name="post_title" rules={[{ required: true, message: '标题能为空!' }]}>
+            <Form.Item
+                label="标题"
+                name="post_title"
+                rules={[{ required: true, message: '标题能为空!' }]}
+            >
                 <Input />
             </Form.Item>
 
-           <Form.Item label="别名" name="alias">
+            <Form.Item label="别名" name="alias">
                 <Input />
             </Form.Item>
 
-            <Form.Item label="缩略图" name="thumbnail" getValueProps={() => ({ path: post.thumb_prev_path })}>
+            <Form.Item
+                label="缩略图"
+                name="thumbnail"
+                getValueProps={() => ({ path: post.thumb_prev_path })}
+            >
                 <AssetsInput />
             </Form.Item>
 
@@ -155,10 +155,13 @@ const PostForm = ({ editId }) => {
             </Form.Item>
 
             <Form.Item label="模板" name="template">
-            <Select placeholder="请选择模板" style={{ width: 120 }}>
-                { tpl.map( (item,index) =>  <Option key={index} value={item.file}>{item.name}</Option> ) }
-               
-            </Select>
+                <Select placeholder="请选择模板" style={{ width: 120 }}>
+                    {tpl.map((item, index) => (
+                        <Option key={index} value={item.file}>
+                            {item.name}
+                        </Option>
+                    ))}
+                </Select>
             </Form.Item>
 
             <Form.Item label="状态" name="post_status" initialValue={1}>
@@ -169,7 +172,7 @@ const PostForm = ({ editId }) => {
             </Form.Item>
 
             <Form.Item wrapperCol={{ offset: 4 }}>
-                <Button style={{ marginRight: "8px" }} type="primary" htmlType="submit">
+                <Button style={{ marginRight: '8px' }} type="primary" htmlType="submit">
                     提交
                 </Button>
 

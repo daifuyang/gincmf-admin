@@ -1,12 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input,InputNumber,DatePicker, Button, Select, TreeSelect, message, Radio, Switch, Space } from 'antd';
-import { AssetsInput, AssetsMultInput, EditorInput } from '@/components/Form'
+import {
+    Form,
+    Input,
+    InputNumber,
+    DatePicker,
+    Button,
+    Select,
+    TreeSelect,
+    message,
+    Radio,
+    Switch,
+    Space,
+} from 'antd';
+import { AssetsInput, AssetsMultInput, EditorInput } from '@/components/Form';
 import { history } from 'umi';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { getPortalCategoryList } from '@/services/portalCategory';
 import { getPortal, addPortal, updatePortal } from '@/services/portal';
 
-import moment from 'moment'
+import moment from 'moment';
 
 import { getThemeFiles } from '@/services/themeFile';
 
@@ -22,64 +34,58 @@ const layout = {
 const { Option } = Select;
 
 const PostForm = ({ editId }) => {
+    const [treeData, setTreeData] = useState([]);
+    const [treeValue, setTreeValue] = useState([]);
 
-    const [treeData, setTreeData] = useState([])
-    const [treeValue, setTreeValue] = useState([])
+    const [form] = Form.useForm();
 
-    const [form] = Form.useForm()
+    const [post, setPost] = useState([]);
 
-    const [post, setPost] = useState([])
-
-    const [tpl,setTpl] = useState([])
+    const [tpl, setTpl] = useState([]);
 
     const onFinish = async (data) => {
+        const param = { ...data };
+        const { category } = param;
 
-        const param = { ...data }
-        const { category } = param
-
-        const categoryIds = []
+        const categoryIds = [];
         if (category !== undefined) {
-            category.forEach(element => {
-                categoryIds.push(element.value)
+            category.forEach((element) => {
+                categoryIds.push(element.value);
             });
         }
 
-        param.category_ids = categoryIds
+        param.category_ids = categoryIds;
 
-        param.is_top = param.is_top ? 1 : 0
-        param.recommended = param.recommended ? 1 : 0
+        param.is_top = param.is_top ? 1 : 0;
+        param.recommended = param.recommended ? 1 : 0;
 
-        const tempExtends =  param.extends
+        const tempExtends = param.extends;
 
-        const extendsJson = {}
-        
-        if(tempExtends) {
-            tempExtends.forEach( item => {
-                extendsJson[item.key] = item.value
-            } )
-    
+        const extendsJson = {};
+
+        if (tempExtends) {
+            tempExtends.forEach((item) => {
+                extendsJson[item.key] = item.value;
+            });
         }
 
-        param.extends = extendsJson
+        param.extends = extendsJson;
 
-        param.publish_time =  param.publish_time.format("YYYY-MM-DD HH:mm:ss")
+        param.publish_time = param.publish_time.format('YYYY-MM-DD HH:mm:ss');
 
-
-        let result
+        let result;
         if (editId > 0) {
-            result = await updatePortal(editId, param)
+            result = await updatePortal(editId, param);
         } else {
-            result = await addPortal(param)
-
+            result = await addPortal(param);
         }
 
         if (result.code === 1) {
             message.success(result.msg);
-            return
+            return;
         }
         message.error(result.msg);
-
-    }
+    };
 
     const tProps = {
         treeDefaultExpandAll: true,
@@ -88,7 +94,7 @@ const PostForm = ({ editId }) => {
         multiple: true,
         treeCheckable: true,
         treeCheckStrictly: true,
-        allowClear: true
+        allowClear: true,
     };
 
     useEffect(() => {
@@ -103,97 +109,101 @@ const PostForm = ({ editId }) => {
         const featchPost = async () => {
             const result = await getPortal(editId);
             if (result.code === 1) {
-                const { data } = result
+                const { data } = result;
                 if (data.category instanceof Array) {
-                    const category = []
-                    data.category.forEach(element => {
+                    const category = [];
+                    data.category.forEach((element) => {
                         category.push({
                             label: element.name,
-                            value: element.id.toString()
-                        })
+                            value: element.id.toString(),
+                        });
                     });
 
                     if (category.length > 0) {
-                        setTreeValue(category)
-                        data.category = category
+                        setTreeValue(category);
+                        data.category = category;
                     }
-
                 }
 
-                if (data.post_keywords === "") {
-                    delete (data.post_keywords)
+                if (data.post_keywords === '') {
+                    delete data.post_keywords;
                 } else {
-                    data.post_keywords = data.keywords
+                    data.post_keywords = data.keywords;
                 }
 
                 if (data.more_json && data.more_json.msrp_range) {
-                    data.msrp_range = data.more_json.msrp_range
+                    data.msrp_range = data.more_json.msrp_range;
                 }
                 if (data.more_json && data.more_json.reference_quote) {
-                    data.reference_quote = data.more_json.reference_quote
+                    data.reference_quote = data.more_json.reference_quote;
                 }
                 if (data.more_json && data.more_json.moq) {
-                    data.moq = data.more_json.moq
+                    data.moq = data.more_json.moq;
                 }
                 if (data.more_json && data.more_json.reference_lead_time) {
-                    data.reference_lead_time = data.more_json.reference_lead_time
+                    data.reference_lead_time = data.more_json.reference_lead_time;
                 }
 
                 if (data.more_json && data.more_json.other) {
-                    data.other = data.more_json.other
+                    data.other = data.more_json.other;
                 }
 
                 if (data.more_json && data.more_json.extends) {
+                    const extendsArray = [];
+                    Object.keys(data.more_json.extends).forEach((key) => {
+                        extendsArray.push({ key: key, value: data.more_json.extends[key] });
+                    });
 
-                    const extendsArray = []
-                    Object.keys(data.more_json.extends).forEach( key => {
-                        extendsArray.push( {"key":key,"value":data.more_json.extends[key]} )
-                    } )
-
-                    data.extends = extendsArray
-
-                    
+                    data.extends = extendsArray;
                 }
 
                 if (data.publish_time) {
-                    data.publish_time = moment(data.publish_time, "YYYY-MM-DD HH:mm:ss")
+                    data.publish_time = moment(data.publish_time, 'YYYY-MM-DD HH:mm:ss');
                 }
 
-                form.setFieldsValue(data)
-                setPost(data)
+                form.setFieldsValue(data);
+                setPost(data);
             }
         };
         featchData();
 
-
         if (editId > 0) {
-            featchPost()
+            featchPost();
         }
 
-        const init  = async () => {
-            const result = await getThemeFiles({'theme':'leshy','type':'article'})
-            if(result.code === 1) {
-                setTpl(result.data)
+        const init = async () => {
+            const result = await getThemeFiles({ theme: 'leshy', type: 'article' });
+            if (result.code === 1) {
+                setTpl(result.data);
             }
+        };
 
-        }
-
-        init()
-
+        init();
     }, [editId]);
 
-    
     return (
         <Form form={form} style={{ maxWidth: '800px' }} {...layout} onFinish={onFinish}>
-            <Form.Item label="分类" name="category" rules={[{ required: true, message: '分类不能为空!' }]}>
+            <Form.Item
+                label="分类"
+                name="category"
+                rules={[{ required: true, message: '分类不能为空!' }]}
+            >
                 <TreeSelect dropdownStyle={{ maxHeight: 400, overflow: 'auto' }} {...tProps} />
             </Form.Item>
 
-            <Form.Item label="标题" name="post_title" rules={[{ required: true, message: '标题能为空!' }]}>
+            <Form.Item
+                label="标题"
+                name="post_title"
+                rules={[{ required: true, message: '标题能为空!' }]}
+            >
                 <Input />
             </Form.Item>
 
-            <Form.Item label="缩略图" name="thumbnail" getValueProps={() => ({ path: post.thumb_prev_path })}>
+            <Form.Item
+                label="缩略图"
+                name="thumbnail"
+                getValueProps={() => ({ path: post.thumb_prev_path })}
+            >
                 <AssetsInput />
             </Form.Item>
 
@@ -241,14 +251,21 @@ const PostForm = ({ editId }) => {
                 <AssetsMultInput type="file" />
             </Form.Item>
 
-            <Form.Item label="音频" name="audio" getValueProps={() => ({ path: post.audio_prev_path })}>
+            <Form.Item
+                label="音频"
+                name="audio"
+                getValueProps={() => ({ path: post.audio_prev_path })}
+            >
                 <AssetsInput type="audio" />
             </Form.Item>
 
-            <Form.Item label="视频" name="video" getValueProps={() => ({ path: post.video_prev_path })}>
+            <Form.Item
+                label="视频"
+                name="video"
+                getValueProps={() => ({ path: post.video_prev_path })}
+            >
                 <AssetsInput type="video" />
             </Form.Item>
-
 
             <Form.Item label="置顶" name="is_top" valuePropName="checked">
                 <Switch />
@@ -278,8 +295,12 @@ const PostForm = ({ editId }) => {
                 <Form.List name="other">
                     {(fields, { add, remove }) => (
                         <>
-                            {fields.map(field => (
-                                <Space key={field.key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                            {fields.map((field) => (
+                                <Space
+                                    key={field.key}
+                                    style={{ display: 'flex', marginBottom: 8 }}
+                                    align="baseline"
+                                >
                                     <Form.Item
                                         {...field}
                                         name={[field.name, 'key']}
@@ -307,15 +328,18 @@ const PostForm = ({ editId }) => {
                         </>
                     )}
                 </Form.List>
-
             </Form.Item>
-            
+
             <Form.Item label="扩展">
                 <Form.List name="extends">
                     {(fields, { add, remove }) => (
                         <>
-                            {fields.map(field => (
-                                <Space key={field.key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                            {fields.map((field) => (
+                                <Space
+                                    key={field.key}
+                                    style={{ display: 'flex', marginBottom: 8 }}
+                                    align="baseline"
+                                >
                                     <Form.Item
                                         {...field}
                                         name={[field.name, 'key']}
@@ -343,18 +367,24 @@ const PostForm = ({ editId }) => {
                         </>
                     )}
                 </Form.List>
-
             </Form.Item>
 
             <Form.Item label="发布时间" name="publish_time">
-            <DatePicker showTime />
+                <DatePicker showTime />
             </Form.Item>
 
-            <Form.Item  rules={[{ required: true, message: '文章模板不能为空!' }]} label="模板" name="template">
-            <Select placeholder="请选择模板" style={{ width: 120 }}>
-                { tpl.map( (item,index) =>  <Option key={index} value={item.file}>{item.name}</Option> ) }
-               
-            </Select>
+            <Form.Item
+                rules={[{ required: true, message: '文章模板不能为空!' }]}
+                label="模板"
+                name="template"
+            >
+                <Select placeholder="请选择模板" style={{ width: 120 }}>
+                    {tpl.map((item, index) => (
+                        <Option key={index} value={item.file}>
+                            {item.name}
+                        </Option>
+                    ))}
+                </Select>
             </Form.Item>
 
             <Form.Item label="状态" name="post_status" initialValue={1}>
@@ -365,7 +395,7 @@ const PostForm = ({ editId }) => {
             </Form.Item>
 
             <Form.Item wrapperCol={{ offset: 4 }}>
-                <Button style={{ marginRight: "8px" }} type="primary" htmlType="submit">
+                <Button style={{ marginRight: '8px' }} type="primary" htmlType="submit">
                     提交
                 </Button>
 

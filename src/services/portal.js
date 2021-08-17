@@ -23,7 +23,7 @@ export async function getPage(id, params) {
 
 export async function addPortal(params) {
     return authRequest('/api/admin/v1/portal/article', {
-        requestType:'json',
+        requestType: 'json',
         method: 'POST',
         data: params,
     });
@@ -31,7 +31,7 @@ export async function addPortal(params) {
 
 export async function updatePortal(id, params) {
     return authRequest(`/api/admin/v1/portal/article/${id}`, {
-        requestType:'json',
+        requestType: 'json',
         method: 'POST',
         data: params,
     });

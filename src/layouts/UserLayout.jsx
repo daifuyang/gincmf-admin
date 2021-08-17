@@ -34,9 +34,7 @@ const UserLayout = (props) => {
             </Helmet>
 
             <div className={styles.container}>
-                <div className={styles.lang}>
-                    {/* <SelectLang /> */}
-                </div>
+                <div className={styles.lang}>{/* <SelectLang /> */}</div>
                 <div className={styles.content}>
                     <div className={styles.top}>
                         <div className={styles.header}>
@@ -45,9 +43,7 @@ const UserLayout = (props) => {
                                 <span className={styles.title}>乐西视界管理后台</span>
                             </Link>
                         </div>
-                        <div className={styles.desc}>
-                            码上云提供技术支持
-                        </div>
+                        <div className={styles.desc}>码上云提供技术支持</div>
                     </div>
                     {children}
                 </div>

@@ -4,7 +4,7 @@ import { AssetsInput } from '@/components/Form';
 import { getPortalCategoryList } from '@/services/portalCategory';
 import '@/assets/css/style.css';
 
-const { Option } = Select
+const { Option } = Select;
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -104,17 +104,12 @@ const Basic = (props) => {
                             <AssetsInput />
                         </Form.Item>
 
-                        <Form.Item
-                            label="状态"
-                            name="status"
-                            initialValue={1}
-                        >
+                        <Form.Item label="状态" name="status" initialValue={1}>
                             <Select placeholder="请选择状态">
                                 <Option value={1}>启用</Option>
                                 <Option value={0}>停用</Option>
                             </Select>
                         </Form.Item>
-
                     </Form>
                 </Col>
             </Row>

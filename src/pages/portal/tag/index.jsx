@@ -47,8 +47,6 @@ const Category = () => {
             valueType: 'option',
             render: (_, item) => (
                 <>
-                   
-                   
                     <Popconfirm
                         title="您确定删除吗?"
                         okText="确认"
@@ -58,7 +56,6 @@ const Category = () => {
                     >
                         <a style={{ color: '#ff4d4f' }}>删除</a>
                     </Popconfirm>
-
                 </>
             ),
         },
@@ -71,7 +68,7 @@ const Category = () => {
         let data = [];
         if (result.code === 1) {
             data = result.data.data;
-            if(data) {
+            if (data) {
                 data.map((v) => {
                     const temp = v;
                     temp.status = status[v.status];

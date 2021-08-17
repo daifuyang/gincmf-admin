@@ -5,7 +5,6 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import PostForm from './components/PostForm';
 
 const Add = () => {
-   
     return (
         <PageHeaderWrapper
             onBack={() => {

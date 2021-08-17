@@ -1,48 +1,49 @@
 import React, { useState, useRef } from 'react';
-import { Button, Popconfirm,Divider, message,Tag,Tooltip } from 'antd';
+import { Button, Popconfirm, Divider, message, Tag, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
-import { getPortals,deletePortal,deletePortals } from '@/services/portal';
+import { getPortals, deletePortal, deletePortals } from '@/services/portal';
 import { history } from 'umi';
-import "@/assets/css/style.css"
+import '@/assets/css/style.css';
 
 const statusObj = { enable: 1, disable: 0 };
 const status = ['停用', '启用'];
 
 const Index = () => {
-
-    const [total, setTotal] = useState(0)
-    const ref = useRef()
+    const [total, setTotal] = useState(0);
+    const ref = useRef();
     // 确认删除
     const confirmDelete = async (id) => {
-        console.log("id",id)
-        const result =  await deletePortal(id)
+        console.log('id', id);
+        const result = await deletePortal(id);
         if (result.code === 1) {
-            ref.current.reload()
-            message.success(result.msg)
-            return
-        } 
-        message.error(result.msg)
-    }
+            ref.current.reload();
+            message.success(result.msg);
+            return;
+        }
+        message.error(result.msg);
+    };
     // 批量删除
     const handleBatch = async (selectedRowKeys) => {
-        console.log("selectedRowKeys",selectedRowKeys)
-        
-        const result =  await deletePortals({"ids":selectedRowKeys})
+        console.log('selectedRowKeys', selectedRowKeys);
+
+        const result = await deletePortals({ ids: selectedRowKeys });
         if (result.code === 1) {
-            ref.current.reload()
-            message.success(result.msg)
-            return
-        } 
-        message.error(result.msg)
-    }
+            ref.current.reload();
+            message.success(result.msg);
+            return;
+        }
+        message.error(result.msg);
+    };
 
     const getTags = (data) => {
-       return data.map( (element) => 
-            <Tag key={element.id} color="blue">{element.name}</Tag>
-      )
-    }
+        return data.map((element) => (
+            <Tag key={element.id} color="blue">
+                {element.name}
+            </Tag>
+        ));
+    };
 
     const columns = [
         {
@@ -66,12 +67,12 @@ const Index = () => {
             width: 100,
             search: true,
             render: (_, item) => (
-                 <div style={{maxWidth:"100px"}} className="ellipsis-1">
+                <div style={{ maxWidth: '100px' }} className="ellipsis-1">
                     <Tooltip placement="topLeft" title={getTags(item.category)}>
-                     {getTags(item.category)}
+                        {getTags(item.category)}
                     </Tooltip>
-                 </div>
-            )
+                </div>
+            ),
         },
         {
             title: '作者',
@@ -137,13 +138,13 @@ const Index = () => {
                 </>
             ),
         },
-    ]
+    ];
     const getData = async (params) => {
         const tempParams = params;
         tempParams.status = statusObj[params.status];
         const result = await getPortals(tempParams);
         let data = [];
-        setTotal(0)
+        setTotal(0);
         if (result.code === 1) {
             data = result.data.data;
             data.map((v) => {
@@ -151,27 +152,33 @@ const Index = () => {
                 temp.status = status[v.status];
                 return temp;
             });
-            setTotal(result.data.total)
-        }else{
-            message.error(result.msg)
+            setTotal(result.data.total);
+        } else {
+            message.error(result.msg);
         }
         return { data };
     };
-    
+
     return (
         <PageHeaderWrapper>
             <ProTable
                 columns={columns}
                 rowKey="id"
-                pagination={{ "total": total, pageSize: 10 }}
+                pagination={{ total: total, pageSize: 10 }}
                 rowSelection={{}}
                 headerTitle="文章列表"
                 request={getData}
                 actionRef={ref}
                 toolBarRender={(_, { selectedRowKeys }) => [
-                    <Button key="add" type="primary" onClick={() => { history.push("/portal/index/add") }}>
+                    <Button
+                        key="add"
+                        type="primary"
+                        onClick={() => {
+                            history.push('/portal/index/add');
+                        }}
+                    >
                         <PlusOutlined /> 新建
-                </Button>,
+                    </Button>,
                     selectedRowKeys && selectedRowKeys.length > 0 && (
                         <Popconfirm
                             key="del"
@@ -179,18 +186,16 @@ const Index = () => {
                             okText="确认"
                             cancelText="取消"
                             onConfirm={() => {
-                                handleBatch(selectedRowKeys)
+                                handleBatch(selectedRowKeys);
                             }}
                             placement="topRight"
                         >
-                            <Button danger>
-                                批量删除
-                            </Button>
+                            <Button danger>批量删除</Button>
                         </Popconfirm>
                     ),
                 ]}
             />
         </PageHeaderWrapper>
-    )
-}
-export default Index
+    );
+};
+export default Index;
